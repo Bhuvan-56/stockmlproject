@@ -2,24 +2,20 @@
 
 import yfinance as yf
 import numpy as np
-import matplotlib.pyplot as plt
+import pandas as pd
 from sklearn.preprocessing import StandardScaler
 from keras.models import Sequential
 from keras.layers import Dense
-from datetime import date
+import plotly.graph_objects as go
 
+# Make sure you have this import
 from .data_collect import data_collection
 
 def run_prediction(stock_ticker, start_date, end_date):
     """
-    Main function to run the entire pipeline:
-    - Download data
-    - Preprocess data
-    - Train the ANN model
-    - Make predictions
-    - Generate and save plots
+    Main function to run the entire pipeline using Plotly for visualization.
     """
-    # Download data using yfinance
+    # Download data
     df = yf.download(
         tickers=stock_ticker,
         start=start_date,
@@ -58,32 +54,35 @@ def run_prediction(stock_ticker, start_date, end_date):
     # Make predictions
     y_pred_ann = model.predict(X_val_scaled).flatten()
 
-    # Generate and save the first plot (Actual vs. Predicted)
-    plt.figure(figsize=(12, 6))
-    plt.plot(val_df.index, y_val.values, marker='o', linestyle='-', label='Actual')
-    plt.plot(val_df.index, y_pred_ann, marker='x', linestyle='--', label='Predicted (ANN)')
-    plt.title(f'Actual vs. Predicted Close Price for {stock_ticker}')
-    plt.xlabel('Date')
-    plt.ylabel('Price')
-    plt.legend()
-    plt.grid(True)
-    plt.savefig('static/plot1.png')
-    plt.close()
+    # --- Plotly Chart 1: Full Period ---
+    fig1 = go.Figure()
+    fig1.add_trace(go.Scatter(x=val_df.index, y=y_val.values, mode='lines+markers', name='Actual'))
+    fig1.add_trace(go.Scatter(x=val_df.index, y=y_pred_ann, mode='lines+markers', name='Predicted (ANN)'))
+    fig1.update_layout(
+        title=f'Actual vs. Predicted Close Price for {stock_ticker}',
+        xaxis_title='Date',
+        yaxis_title='Price',
+        template='plotly_white'
+    )
+    # Convert plot to HTML
+    plot1_html = fig1.to_html(full_html=False, include_plotlyjs='cdn')
 
-    # Generate and save the second plot (Last 7 days)
+
+    # --- Plotly Chart 2: Last 7 Days ---
     last7_df_index = val_df.index[-7:]
     last7_actual = y_val.values[-7:]
     last7_pred = y_pred_ann[-7:]
+    
+    fig2 = go.Figure()
+    fig2.add_trace(go.Scatter(x=last7_df_index, y=last7_actual, mode='lines+markers', name='Actual'))
+    fig2.add_trace(go.Scatter(x=last7_df_index, y=last7_pred, mode='lines+markers', name='Predicted (ANN)'))
+    fig2.update_layout(
+        title=f'Last 7 Days: Actual vs. Predicted for {stock_ticker}',
+        xaxis_title='Date',
+        yaxis_title='Price',
+        template='plotly_white'
+    )
+    # Convert plot to HTML (no need to include plotly.js again)
+    plot2_html = fig2.to_html(full_html=False, include_plotlyjs=False)
 
-    plt.figure(figsize=(12, 6))
-    plt.plot(last7_df_index, last7_actual, marker='o', linestyle='-', label='Actual')
-    plt.plot(last7_df_index, last7_pred, marker='x', linestyle='--', label='Predicted (ANN)')
-    plt.title(f'Actual vs. Predicted Close Price for {stock_ticker} (Last 7 Days)')
-    plt.xlabel('Date')
-    plt.ylabel('Price')
-    plt.legend()
-    plt.grid(True)
-    plt.savefig('static/plot2.png')
-    plt.close()
-
-    return 'static/plot1.png', 'static/plot2.png'
+    return plot1_html, plot2_html

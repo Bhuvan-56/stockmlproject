@@ -1,9 +1,67 @@
-{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Price Predictor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div id="loader-overlay" class="loader-overlay">
+        <div class="loader"></div>
+        <p class="loader-text">Training model and generating plots... Please wait.</p>
+    </div>
 
-{% block head %}
-<title>Stock ml predict</title>
-{% endblock %}
+    <header>
+        <h1>Stock Price Predictor</h1>
+        <p>Enter a stock ticker and date range to get price predictions.</p>
+    </header>
 
-{% block body %}
+    <main>
+        <div class="form-container">
+            <!-- Give the form an ID -->
+            <form id="prediction-form" method="POST" action="/">
+                <div class="form-group">
+                    <label for="ticker">Stock Ticker</label>
+                    <input type="text" id="ticker" name="ticker" placeholder="e.g., AAPL" required>
+                </div>
+                <div class="form-group">
+                    <label for="start_date">Start Date</label>
+                    <input type="date" id="start_date" name="start_date" required>
+                </div>
+                <div class="form-group">
+                    <label for="end_date">End Date</label>
+                    <input type="date" id="end_date" name="end_date" required>
+                </div>
+                <button type="submit">Get Prediction</button>
+            </form>
+        </div>
 
-{% endblock %}
+        {% if plot1_html %}
+        <div class="results-container">
+            <h2>Prediction Results</h2>
+            <div class="plot-section">
+                <h3>Full Period: Actual vs. Predicted Price</h3>
+                {{ plot1_html | safe }}
+            </div>
+            <div class="plot-section">
+                <h3>Last 7 Days: Actual vs. Predicted Price</h3>
+                {{ plot2_html | safe }}
+            </div>
+        </div>
+        {% endif %}
+    </main>
+
+    <footer>
+        <p>Stock Prediction App</p>
+    </footer>
+
+    <!-- JavaScript to show the loader -->
+    <script>
+        document.getElementById('prediction-form').addEventListener('submit', function() {
+            document.getElementById('loader-overlay').style.display = 'flex';
+        });
+    </script>
+</body>
+</html>
