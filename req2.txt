@@ -8,3 +8,4 @@ tensorflow
 yfinance
 plotly
 matplotlib
+gunicorn
