@@ -68,21 +68,21 @@ def run_prediction(stock_ticker, start_date, end_date):
     plot1_html = fig1.to_html(full_html=False, include_plotlyjs='cdn')
 
 
-    # --- Plotly Chart 2: Last 7 Days ---
-    last7_df_index = val_df.index[-7:]
-    last7_actual = y_val.values[-7:]
-    last7_pred = y_pred_ann[-7:]
+    # # --- Plotly Chart 2: Last 7 Days ---
+    # last7_df_index = val_df.index[-7:]
+    # last7_actual = y_val.values[-7:]
+    # last7_pred = y_pred_ann[-7:]
     
-    fig2 = go.Figure()
-    fig2.add_trace(go.Scatter(x=last7_df_index, y=last7_actual, mode='lines+markers', name='Actual'))
-    fig2.add_trace(go.Scatter(x=last7_df_index, y=last7_pred, mode='lines+markers', name='Predicted (ANN)'))
-    fig2.update_layout(
-        title=f'Last 7 Days: Actual vs. Predicted for {stock_ticker}',
-        xaxis_title='Date',
-        yaxis_title='Price',
-        template='plotly_white'
-    )
-    # Convert plot to HTML (no need to include plotly.js again)
-    plot2_html = fig2.to_html(full_html=False, include_plotlyjs=False)
+    # fig2 = go.Figure()
+    # fig2.add_trace(go.Scatter(x=last7_df_index, y=last7_actual, mode='lines+markers', name='Actual'))
+    # fig2.add_trace(go.Scatter(x=last7_df_index, y=last7_pred, mode='lines+markers', name='Predicted (ANN)'))
+    # fig2.update_layout(
+    #     title=f'Last 7 Days: Actual vs. Predicted for {stock_ticker}',
+    #     xaxis_title='Date',
+    #     yaxis_title='Price',
+    #     template='plotly_white'
+    # )
+    # # Convert plot to HTML (no need to include plotly.js again)
+    # plot2_html = fig2.to_html(full_html=False, include_plotlyjs=False)
 
-    return plot1_html, plot2_html
+    return plot1_html, None
