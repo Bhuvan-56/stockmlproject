@@ -2,10 +2,6 @@
 
 A simple web application that predicts stock prices using an Artificial Neural Network (ANN). The user enters a stock ticker(can find it online), and the app trains a model using the first 80% of the range and showcases the predictions for the last 20% of the range.
 
-> **Note**: This is deployed on render and may face temporary downtime.
-
-**[Deployed on Render](https://the-ann-stock-predictor.onrender.com/)** | **[GitHub Repository](https://github.com/Bhuvan-56/stockmlproject)**
-
 ## Key Features
 
 *   **User-Friendly Interface**: A clean and simple form to input a stock ticker.
@@ -95,3 +91,8 @@ To get a local copy up and running, follow these simple steps.
     ```
 
 5.  **Open your browser** and navigate to `http://127.0.0.1:5000` to see the application in action.
+
+#### You can check out the deployed web application
+> **Note**: This is deployed on render and may face temporary downtime and takes some time to fire up after temporary inactivity.
+
+**[Deployed on Render](https://the-ann-stock-predictor.onrender.com/)** | **[GitHub Repository](https://github.com/Bhuvan-56/stockmlproject)**
